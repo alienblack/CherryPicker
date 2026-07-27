@@ -11,16 +11,18 @@ make
 Run:
 
 ```bash
-./solve < instance.nw
+./solver_submit < instance.nw
 ```
 
-The entrypoint intentionally TLEs for two-tree instances with more than 500 leaves:
+The submit entrypoint intentionally gives no output for two-tree instances:
 
 ```bash
-#p 2 n, n > 500
+#p 2 n
 ```
 
-Otherwise it dispatches to the two-tree RS solver for `t=2`, and to the certified many-tree core for `t>2`.
+For `t>2`, it dispatches to the certified many-tree core. This is a
+conservative output policy: if the solver cannot safely justify the result, it
+prints nothing rather than returning a risky forest.
 
 ## Update note for branch `new`
 
@@ -33,5 +35,13 @@ This branch includes:
 - Makefile target for building `solver_submit`.
 - Bundled many-tree source.
 - Bundled h56/HiGHS two-tree route source.
+
+Final safety update:
+
+- Two-tree instances are suppressed by the wrapper and produce no output.
+- Timeout/SIGTERM incumbent output in the bundled two-tree route is guarded so
+  an unfinished incumbent cannot be printed accidentally.
+- The many-tree executable is built with strict/certified defaults and
+  empirical accepts disabled.
 
 CherryPicker is the certified/conservative version.
