@@ -14107,6 +14107,7 @@ static int g_periodic_task_tick = 0;
 static constexpr size_t SIGNAL_BEST_OUTPUT_CAP = 8u * 1024u * 1024u;
 static char g_signal_best_output[SIGNAL_BEST_OUTPUT_CAP];
 static volatile sig_atomic_t g_signal_best_output_len = 0;
+static volatile sig_atomic_t g_signal_output_enabled = 1;
 
 static void update_signal_best_output(const string &text) {
     size_t n = min(text.size(), SIGNAL_BEST_OUTPUT_CAP - 1);
@@ -14121,7 +14122,7 @@ static void update_signal_best_output(const string &text) {
 static void handle_signal(int) {
     g_stop_requested = 1;
     sig_atomic_t n = g_signal_best_output_len;
-    if (n > 0) {
+    if (g_signal_output_enabled && n > 0) {
         const char *data = g_signal_best_output;
         sig_atomic_t written = 0;
         while (written < n) {
@@ -14130,8 +14131,8 @@ static void handle_signal(int) {
             if (rc <= 0) break;
             written += (sig_atomic_t)rc;
         }
-        _exit(0);
     }
+    _exit(0);
 }
 
 static void maybe_run_periodic_task(bool force = false) {
@@ -22266,6 +22267,8 @@ int main() {
     if (T1.root < 0 || T2.root < 0) return 1;
     build_lca(T1);
     build_lca(T2);
+    g_signal_output_enabled =
+        h56_env_int("H56_SIGNAL_OUTPUT", 1) != 0 ? 1 : 0;
 
     signal(SIGTERM, handle_signal);
     signal(SIGINT, handle_signal);

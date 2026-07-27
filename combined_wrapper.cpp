@@ -90,7 +90,7 @@ int main() {
     int n = 0;
     if (!parse_header(input, t, n)) return 1;
 
-    if (t == 2 && n > 500) {
+    if (t == 2) {
         while (true) pause();
     }
 
