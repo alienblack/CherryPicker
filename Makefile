@@ -16,7 +16,7 @@ CERT_FLAGS := \
 
 .PHONY: all clean
 
-all: $(BUILD)/manytree_solver $(BUILD)/twotree_solver
+all: $(BUILD)/manytree_solver
 
 $(BUILD):
 	mkdir -p $@

@@ -11877,9 +11877,9 @@ int main(int argc, char **argv) {
                  << " seconds=" << elapsed(start) << "\n";
             return ans == ExactDecision::Yes ? 0 : ans == ExactDecision::No ? 2 : 124;
         }
-        if (opt.tle_two_trees && inst.tree_count == 2) {
-            cerr << "TLE_TWO_TREES tree_count=2\n";
-            while (true) this_thread::sleep_for(chrono::hours(24));
+        if (inst.tree_count == 2) {
+            cerr << "SKIP_TWO_TREES tree_count=2\n";
+            return 0;
         }
         bool has_moderate_recursive_cluster = false;
         if (opt.strict_exact && !opt.has_target &&

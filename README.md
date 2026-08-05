@@ -14,10 +14,10 @@ Run:
 ./solve < instance.nw
 ```
 
-The entrypoint intentionally TLEs for two-tree instances with more than 500 leaves:
+The entrypoint intentionally terminates with no output for two-tree instances:
 
 ```bash
-#p 2 n, n > 500
+#p 2 n
 ```
 
-Otherwise it dispatches to the two-tree RS solver for `t=2`, and to the certified many-tree core for `t>2`.
+For `t>2`, it dispatches to the certified many-tree core.
